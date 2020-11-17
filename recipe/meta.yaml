@@ -10,13 +10,13 @@ source:
   git_rev: v{{ version }}
 
 build:
-  number: 1
+  number: 2
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
 
 requirements:
   build:
     - cmake {{ cmake }} 
-    - make {{ make }}
+    - make
     - {{ compiler('cxx') }}
     - pkg-config {{ pkg_config }}
   host:
