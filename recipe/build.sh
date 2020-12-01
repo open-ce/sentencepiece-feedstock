@@ -26,9 +26,6 @@ fi
 
 PAGE_SIZE=`getconf PAGE_SIZE`
 
-which protoc
-protoc --version
-
 mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} .. -DSPM_BUILD_TEST=ON -DSPM_USE_BUILTIN_PROTOBUF=OFF -DCMAKE_AR=$GCC_AR
