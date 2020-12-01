@@ -26,6 +26,7 @@ requirements:
     - python {{ python }}
     - setuptools {{ setuptools }}
     - protobuf {{ protobuf }}
+    - patchelf
   run:
     - python {{ python }} 
     - protobuf {{ protobuf }}
