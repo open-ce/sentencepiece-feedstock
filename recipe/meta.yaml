@@ -1,4 +1,4 @@
-{% set version = "0.1.86" %}
+{% set version = "0.1.91" %}
 {% set name = "sentencepiece" %}
 
 package:
@@ -8,9 +8,12 @@ package:
 source:
   git_url: https://github.com/google/sentencepiece
   git_rev: v{{ version }}
+  patches:
+    # 03xx - patch temporary to fix a problem that when fixed upstream can be removed
+    - 0300-fix-incompatible-protobuf-headers-error.patch
 
 build:
-  number: 2
+  number: 1
   string: py{{ python | replace(".", "") }}_{{ PKG_BUILDNUM }}
 
 requirements:
@@ -23,6 +26,7 @@ requirements:
     - python {{ python }}
     - setuptools {{ setuptools }}
     - protobuf {{ protobuf }}
+    - patchelf
   run:
     - python {{ python }} 
     - protobuf {{ protobuf }}
