@@ -31,6 +31,9 @@ requirements:
     - setuptools {{ setuptools }}
     - protobuf {{ protobuf }}
     - patchelf
+    # Use pins to control cos6/cos7 match
+    - libgcc-ng  {{ libgcc }}
+    - libstdcxx-ng  {{ libstdcxx }}
   run:
     - python {{ python }} 
     - protobuf {{ protobuf }}
