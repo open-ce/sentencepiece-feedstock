@@ -13,7 +13,7 @@ source:
     - 0300-fix-incompatible-protobuf-headers-error.patch
 
 build:
-  number: 6
+  number: 7
   string: h{{ PKG_HASH }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
 
 requirements:
@@ -24,16 +24,16 @@ requirements:
     - pkg-config {{ pkg_config }}
     - patch
     # Use pins to control cos6/cos7 match
-    - libgcc-ng  {{ libgcc }}
-    - libstdcxx-ng  {{ libstdcxx }}
+    - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
+    - libstdcxx-ng  {{ libstdcxx }}   # [x86_64 and c_compiler_version == "7.2.*"]
   host:
     - python {{ python }}
     - setuptools {{ setuptools }}
     - protobuf {{ protobuf }}
     - patchelf
     # Use pins to control cos6/cos7 match
-    - libgcc-ng  {{ libgcc }}
-    - libstdcxx-ng  {{ libstdcxx }}
+    - libgcc-ng  {{ libgcc }}         # [x86_64 and c_compiler_version == "7.2.*"]
+    - libstdcxx-ng  {{ libstdcxx }}   # [x86_64 and c_compiler_version == "7.2.*"]
   run:
     - python {{ python }} 
     - protobuf {{ protobuf }}
