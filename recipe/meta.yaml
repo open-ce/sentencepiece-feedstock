@@ -10,14 +10,14 @@ source:
   git_rev: v{{ version }}
 
 build:
-  number: 1
+  number: 2
   string: h{{ PKG_HASH }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
 
 requirements:
   build:
     - cmake {{ cmake }} 
     - make
-    - {{ compiler('cxx') }}
+    - {{ compiler('cxx') }}              #[ppc_arch != "p10"]
     - pkg-config {{ pkg_config }}
   host:
     - python {{ python }}

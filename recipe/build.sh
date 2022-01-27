@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# (C) Copyright IBM Corp. 2019,2020. All Rights Reserved.
+# (C) Copyright IBM Corp. 2019,2022. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,15 @@
 
 set -ex
 
+if [[ $ppc_arch == "p10" ]]
+then
+  export GCC_AR=/opt/rh/gcc-toolset-10/root/usr/bin/ar
+  export LDFLAGS="-L/lib64"
+  export LD_LIBRARY_PATH=/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH}
+else
+  export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+fi
+
 ARCH=`uname -p`
 if [[ "${ARCH}" == 'ppc64le' ]]; then
     ARCH_SO_NAME="powerpc64le"
@@ -32,7 +41,6 @@ cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} .. -DSPM_BUILD_TEST=ON -DSPM_ENABLE_TCMAL
 make -j $(nproc)
 
 export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
-export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 make install
 
 cd ../python
@@ -41,10 +49,6 @@ python setup.py install
 
 SYS_PYTHON_MAJOR=$(python -c "import sys;print(sys.version_info.major)")
 SYS_PYTHON_MINOR=$(python -c "import sys;print(sys.version_info.minor)")
-if [[ "${SYS_PYTHON_MINOR}" -gt '7' ]]; then
-    patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}-${ARCH_SO_NAME}-linux-gnu.so
-else
-    patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}m-${ARCH_SO_NAME}-linux-gnu.so
-fi
+patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}-${ARCH_SO_NAME}-linux-gnu.so
 
 exit 0
