@@ -27,6 +27,7 @@ then
     export GCC_AR=$GCC_10_HOME/bin/ar
     export LDFLAGS="-L/lib64"
     export LD_LIBRARY_PATH=/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH}
+  fi
 else
   export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 fi
