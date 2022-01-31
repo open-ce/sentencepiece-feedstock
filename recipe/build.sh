@@ -19,9 +19,14 @@ set -ex
 
 if [[ $ppc_arch == "p10" ]]
 then
-  export GCC_AR=/opt/rh/gcc-toolset-10/root/usr/bin/ar
-  export LDFLAGS="-L/lib64"
-  export LD_LIBRARY_PATH=/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH}
+  if [[ -z "${GCC_10_HOME}" ]];
+  then
+    echo "Please set GCC_10_HOME to the install path of gcc-toolset-10"
+    exit 1
+  else
+    export GCC_AR=$GCC_10_HOME/bin/ar
+    export LDFLAGS="-L/lib64"
+1    export LD_LIBRARY_PATH=/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH}
 else
   export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 fi
