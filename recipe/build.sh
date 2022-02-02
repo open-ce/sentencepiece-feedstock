@@ -25,11 +25,11 @@ then
     exit 1
   else
     export GCC_AR=$GCC_10_HOME/bin/ar
-    export LDFLAGS="-L/lib64"
-    export LD_LIBRARY_PATH=/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH}
+    # Removing Anaconda supplied libstdc++.so so that generated libs build against
+    # libstdc++.so present on the system provided by gcc-toolset-10
+    rm ${PREFIX}/lib/libstdc++.so*
+    rm ${BUILD_PREFIX}/lib/libstdc++.so*
   fi
-else
-  export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 fi
 
 ARCH=`uname -p`
@@ -47,6 +47,7 @@ cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} .. -DSPM_BUILD_TEST=ON -DSPM_ENABLE_TCMAL
 make -j $(nproc)
 
 export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
+export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 make install
 
 cd ../python
