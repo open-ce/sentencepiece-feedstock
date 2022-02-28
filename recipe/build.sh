@@ -24,6 +24,7 @@ then
     echo "Please set GCC_10_HOME to the install path of gcc-toolset-10"
     exit 1
   else
+    export CMAKE_PREFIX_PATH=$PREFIX
     export GCC_AR=$GCC_10_HOME/bin/ar
     # Removing Anaconda supplied libstdc++.so so that generated libs build against
     # libstdc++.so present on the system provided by gcc-toolset-10
@@ -46,8 +47,8 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} .. -DSPM_BUILD_TEST=ON -DSPM_ENABLE_TCMALLOC=OFF -DSPM_USE_BUILTIN_PROTOBUF=OFF -DCMAKE_AR=$GCC_AR
 make -j $(nproc)
 
-export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
-export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig:${PREFIX}/lib64/pkgconfig:${PKG_CONFIG_PATH}
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}
 make install
 
 cd ../python
