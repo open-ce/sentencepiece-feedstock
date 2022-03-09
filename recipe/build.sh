@@ -57,6 +57,10 @@ python setup.py install
 
 SYS_PYTHON_MAJOR=$(python -c "import sys;print(sys.version_info.major)")
 SYS_PYTHON_MINOR=$(python -c "import sys;print(sys.version_info.minor)")
-patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}-${ARCH_SO_NAME}-linux-gnu.so
+if [[ "${SYS_PYTHON_MINOR}" -gt '7' ]]; then
+    patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}-${ARCH_SO_NAME}-linux-gnu.so
+else
+    patchelf --page-size ${PAGE_SIZE} --set-rpath $LD_LIBRARY_PATH $PREFIX/lib/python${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}/site-packages/sentencepiece-$PKG_VERSION-py${SYS_PYTHON_MAJOR}.${SYS_PYTHON_MINOR}-linux-${ARCH}.egg/sentencepiece/_sentencepiece.cpython-${CONDA_PY}m-${ARCH_SO_NAME}-linux-gnu.so
+fi
 
 exit 0
