@@ -17,22 +17,6 @@
 
 set -ex
 
-if [[ $ppc_arch == "p10" ]]
-then
-  if [[ -z "${GCC_11_HOME}" ]];
-  then
-    echo "Please set GCC_11_HOME to the install path of gcc-toolset-11"
-    exit 1
-  else
-    export CMAKE_PREFIX_PATH=$PREFIX
-    export GCC_AR=$GCC_11_HOME/bin/ar
-    # Removing Anaconda supplied libstdc++.so so that generated libs build against
-    # libstdc++.so present on the system provided by gcc-toolset-10
-    rm ${PREFIX}/lib/libstdc++.so*
-    rm ${BUILD_PREFIX}/lib/libstdc++.so*
-  fi
-fi
-
 ARCH=`uname -p`
 if [[ "${ARCH}" == 'ppc64le' ]]; then
     ARCH_SO_NAME="powerpc64le"
