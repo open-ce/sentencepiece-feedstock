@@ -33,7 +33,16 @@ requirements:
 test:
   imports:
     - sentencepiece
- 
+  requires:
+    - pip
+    - pytest
+  source_files:
+    - python/test
+    - data
+  commands:
+    # upstream test suite expects to be run from PKG_ROOT/python
+    - cd python && pytest test
+
 about:
   home: https://github.com/google/sentencepiece
   license: Apache License 2.0
