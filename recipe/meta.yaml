@@ -10,7 +10,7 @@ source:
   git_rev: v{{ version }}
 
 build:
-  number: 1
+  number: 5
   string: h{{ PKG_HASH }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   script_env:
     - GCC_11_HOME                        #[ppc_arch == 'p10']
@@ -25,7 +25,7 @@ requirements:
     - python {{ python }}
     - setuptools {{ setuptools }}
     - protobuf {{ protobuf }}
-    - patchelf
+    - patchelf 0.12
   run:
     - python {{ python }} 
     - protobuf {{ protobuf }}
@@ -33,7 +33,16 @@ requirements:
 test:
   imports:
     - sentencepiece
- 
+  requires:
+    - pip
+    - pytest
+  source_files:
+    - python/test
+    - data
+  commands:
+    # upstream test suite expects to be run from PKG_ROOT/python
+    - cd python && pytest test
+
 about:
   home: https://github.com/google/sentencepiece
   license: Apache License 2.0
