@@ -8,9 +8,6 @@ package:
 source:
   git_url: https://github.com/google/sentencepiece
   git_rev: v{{ version }}
-  patches:
-    - 0001-add-path-for-libatomic.so-to-list-of-libs.patch      #[ppc_arch == 'p10']
-    - 0301-fix-for-Swap32-build-error-on-s390x.patch            #[s390x]
 
 build:
   number: 1
