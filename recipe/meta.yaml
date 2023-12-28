@@ -9,7 +9,7 @@ source:
   git_url: https://github.com/google/sentencepiece
   git_rev: v{{ version }}
   patches:                                      #[s390x]
-    - 0001-Fix-issues-for-s390x.patch           #[s390x]
+    - 0001-fix-build-failure-on-s390x.patch     #[s390x]
 
 build:
   number: 2

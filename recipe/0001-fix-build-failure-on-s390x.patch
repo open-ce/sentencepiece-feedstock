@@ -1,7 +1,7 @@
-From 25de25a6f8e79e3d688dbb88abf4b92043190daa Mon Sep 17 00:00:00 2001
+From b77801084bd73999d76be903407823874d2680fb Mon Sep 17 00:00:00 2001
 From: Aman-Surkar <aman_surkar@persistent.com>
-Date: Thu, 28 Dec 2023 09:59:12 +0000
-Subject: [PATCH] Fix issues for s390x
+Date: Thu, 28 Dec 2023 10:27:39 +0000
+Subject: [PATCH] Fix for 390x
 
 ---
  src/normalizer.cc | 6 +++---
