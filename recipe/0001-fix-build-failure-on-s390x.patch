@@ -1,27 +1,39 @@
-From a6d6cb87e01a7bea3f045149a78fa3050cb774da Mon Sep 17 00:00:00 2001
+From b3d6e23cb433847bf7068f78476cee9762aee15c Mon Sep 17 00:00:00 2001
 From: Aman-Surkar <aman_surkar@persistent.com>
-Date: Thu, 28 Dec 2023 12:40:09 +0000
+Date: Thu, 28 Dec 2023 17:56:05 +0000
 Subject: [PATCH] fix-build-failure-on-s390x
 
 ---
- src/normalizer.cc | 6 +++---
- src/normalizer.h  | 1 +
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ src/normalizer.cc | 13 +++++++------
+ src/normalizer.h  |  1 +
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/src/normalizer.cc b/src/normalizer.cc
-index 2ab8084..eea4b49 100644
+index 2ab8084..b18bd10 100644
 --- a/src/normalizer.cc
 +++ b/src/normalizer.cc
-@@ -265,7 +265,7 @@ std::string Normalizer::EncodePrecompiledCharsMap(
+@@ -264,10 +264,11 @@ std::string Normalizer::EncodePrecompiledCharsMap(
+ 
  #ifdef IS_BIG_ENDIAN
    uint32 *data = reinterpret_cast<uint32 *>(const_cast<char *>(blob.data()));
-   for (int i = 0; i <= trie_blob.size() / 4; ++i)
+-  for (int i = 0; i <= trie_blob.size() / 4; ++i)
 -    data[i] = util::Swap32(data[i]);
++  for (int i = 0; i <= blob.size() / 4; ++i)
 +    data[i] = Swap32(data[i]);
  #endif
  
++  blob.append(normalized.data(), normalized.size());
    return blob;
-@@ -285,7 +285,7 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+ }
+ 
+@@ -279,13 +280,12 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+   if (blob.size() <= sizeof(trie_blob_size) ||
+       !string_util::DecodePOD<uint32>(
+           absl::string_view(blob.data(), sizeof(trie_blob_size)),
+-          &trie_blob_size) ||
+-      trie_blob_size >= blob.size()) {
++          &trie_blob_size)) {
+     return util::InternalError("Blob for normalization rule is broken.");
    }
  
  #ifdef IS_BIG_ENDIAN
@@ -30,12 +42,15 @@ index 2ab8084..eea4b49 100644
  #endif
  
    if (trie_blob_size >= blob.size())
-@@ -296,7 +296,7 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+@@ -294,9 +294,10 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+   blob.remove_prefix(sizeof(trie_blob_size));
+ 
  #ifdef IS_BIG_ENDIAN
++  CHECK_OR_RETURN(buffer);
    buffer->assign(blob.data(), trie_blob_size);
    uint32 *data = reinterpret_cast<uint32 *>(const_cast<char *>(buffer->data()));
 -  for (int i = 0; i < trie_blob_size / 4; ++i) data[i] = util::Swap32(data[i]);
-+  for (int i = 0; i < trie_blob_size / 4; ++i) data[i] = Swap32(data[i]);
++  for (int i = 0; i < buffer->size() / 4; ++i) data[i] = Swap32(data[i]);
    *trie_blob = absl::string_view(buffer->data(), trie_blob_size);
  #else
    *trie_blob = absl::string_view(blob.data(), trie_blob_size);
