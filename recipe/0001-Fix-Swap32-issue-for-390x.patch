@@ -1,0 +1,43 @@
+From 2b303a36ad6a5a7b9a375ce3e9df0732e99c1f0b Mon Sep 17 00:00:00 2001
+From: Aman-Surkar <aman_surkar@persistent.com>
+Date: Thu, 28 Dec 2023 09:26:42 +0000
+Subject: [PATCH] Fix Swap32 issue for 390x
+
+---
+ src/normalizer.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/normalizer.cc b/src/normalizer.cc
+index 0e406a6..f41387d 100644
+--- a/src/normalizer.cc
++++ b/src/normalizer.cc
+@@ -263,7 +263,7 @@ std::string Normalizer::EncodePrecompiledCharsMap(
+ 
+ #ifdef IS_BIG_ENDIAN
+   uint32 *data = reinterpret_cast<uint32 *>(const_cast<char *>(blob.data()));
+-  for (int i = 0; i < blob.size() / 4; ++i) data[i] = util::Swap32(data[i]);
++  for (int i = 0; i < blob.size() / 4; ++i) data[i] = common::Swap32(data[i]);
+ #endif
+ 
+   blob.append(normalized.data(), normalized.size());
+@@ -284,7 +284,7 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+   }
+ 
+ #ifdef IS_BIG_ENDIAN
+-  trie_blob_size = util::Swap32(trie_blob_size);
++  trie_blob_size = common::Swap32(trie_blob_size);
+ #endif
+ 
+   if (trie_blob_size >= blob.size()) {
+@@ -297,7 +297,7 @@ util::Status Normalizer::DecodePrecompiledCharsMap(
+   CHECK_OR_RETURN(buffer);
+   buffer->assign(blob.data(), trie_blob_size);
+   uint32 *data = reinterpret_cast<uint32 *>(const_cast<char *>(buffer->data()));
+-  for (int i = 0; i < buffer->size() / 4; ++i) data[i] = util::Swap32(data[i]);
++  for (int i = 0; i < buffer->size() / 4; ++i) data[i] = common::Swap32(data[i]);
+   *trie_blob = absl::string_view(buffer->data(), trie_blob_size);
+ #else
+   *trie_blob = absl::string_view(blob.data(), trie_blob_size);
+-- 
+2.40.1
+
