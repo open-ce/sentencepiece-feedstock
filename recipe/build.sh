@@ -36,6 +36,7 @@ fi
 ARCH=`uname -p`
 if [[ "${ARCH}" == 'ppc64le' ]]; then
     ARCH_SO_NAME="powerpc64le"
+    export LDFLAGS="${LDFLAGS} -L$PREFIX/lib -L$BUILD_PREFIX/lib"
 else
     ARCH_SO_NAME=${ARCH}
 fi
