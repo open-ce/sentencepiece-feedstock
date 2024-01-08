@@ -1,4 +1,4 @@
-{% set version = "0.1.97" %}
+{% set version = "0.1.99" %}
 {% set name = "sentencepiece" %}
 
 package:
@@ -12,7 +12,7 @@ source:
     - 0001-fix-build-failure-on-s390x.patch     #[s390x]
 
 build:
-  number: 2
+  number: 1
   string: h{{ PKG_HASH }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   script_env:
     - GCC_11_HOME                        #[ppc_arch == 'p10']
