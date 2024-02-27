@@ -15,7 +15,7 @@ build:
   number: 1
   string: h{{ PKG_HASH }}_py{{ python | replace(".", "") }}_pb{{ protobuf | replace(".*", "")}}_{{ PKG_BUILDNUM }}
   script_env:
-    - GCC_11_HOME                        #[ppc_arch == 'p10']
+    - GCC_HOME                        #[ppc_arch == 'p10']
 
 requirements:
   build:
