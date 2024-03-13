@@ -1,5 +1,5 @@
 From b3d6e23cb433847bf7068f78476cee9762aee15c Mon Sep 17 00:00:00 2001
-From: Aman-Surkar <aman_surkar@persistent.com>
+From: Aman Surkar <Aman.Surkar@ibm.com>
 Date: Thu, 28 Dec 2023 17:56:05 +0000
 Subject: [PATCH] fix-build-failure-on-s390x
 
